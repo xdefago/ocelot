@@ -37,10 +37,7 @@ object Receiver
   def from (handler: (Event)=> Unit) = this(handler)
   
   def apply(handler: (Event)=> Unit): Receiver =
-    new Receiver
-    {
-      def deliver(e: Event) = handler(e)
-    }
+    (e: Event) => handler(e)
 }
 
 
@@ -97,14 +94,25 @@ trait ReceiverImpl
 import scala.language.reflectiveCalls
 
 
-trait SendingProtocolOps
+trait SenderProtocolOps
 { this: {
-    //def process: OcelotProcess
     def dispatcher: Dispatcher
   } =>
   
   protected[this] def DELIVER(ev: Event) = dispatcher.deliver(ev)
+}
+
+trait SendingProtocolOps
+{ this: {
+    def sender: Sender
+  } =>
+  protected[this] def SEND(ev: Event) = sender.send(ev)
   
+  protected[this] def ALL: Set[PID] = this.neighbors
+  
+  protected[this] def neighbors: Set[PID] = sender.neighbors
+  
+  protected[this] def N: Int = sender.neighbors.size
 }
 
 trait ActiveProtocolOps

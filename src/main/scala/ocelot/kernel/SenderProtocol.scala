@@ -18,7 +18,7 @@ package ocelot.kernel
 
 import ocelot._
 
-trait SendingProtocol
+trait SenderProtocol
   extends Protocol
     with SenderImpl
 {

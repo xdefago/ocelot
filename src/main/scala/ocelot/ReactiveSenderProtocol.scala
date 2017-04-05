@@ -16,15 +16,15 @@
 
 package ocelot
 
-import ocelot.kernel.SendingProtocol
+import ocelot.kernel.SenderProtocol
 
 /**
   * Created by defago on 2017/03/25.
   */
 abstract class ReactiveSenderProtocol(p: OcelotProcess, nickname: String, sender: Sender)
   extends ReactiveProtocol(p, nickname)
-    with SendingProtocol
-    with SendingProtocolOps
+    with SenderProtocol
+    with SenderProtocolOps
 {
   /**
     * Returns the set of neighbors as logically seen by the above protocol.

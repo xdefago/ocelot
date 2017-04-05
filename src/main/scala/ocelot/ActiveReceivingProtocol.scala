@@ -189,3 +189,10 @@ abstract class ActiveReceivingProtocol(p: OcelotProcess, nickname: String)
 
 abstract class Program(p: OcelotProcess, nickname: String)
   extends ActiveReceivingProtocol(p, nickname)
+
+abstract class SendingProgram(p: OcelotProcess, nickname: String)
+  extends Program(p, nickname)
+    with SendingProtocolOps
+{
+  def sender: Sender
+}

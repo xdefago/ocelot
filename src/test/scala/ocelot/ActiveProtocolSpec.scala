@@ -161,11 +161,11 @@ class ActiveProtocolSpec
     val topology = Clique(numProcesses)
   
     case class MyMessage(from: PID, to: PID) extends UnicastMessage
-    class MySender (p: OcelotProcess, sender: Sender) extends ActiveProtocol(p, "sender")
+    class MySender (p: OcelotProcess, val sender: Sender) extends SendingProgram(p, "sender")
     {
       override def run () = {
         logger.trace(s"[$me] sending message")
-        sender.send(MyMessage(me, p1))
+        SEND(MyMessage(me, p1))
       }
     }
     class MyReceiver (p: OcelotProcess) extends Program(p, "receiver")
@@ -177,11 +177,10 @@ class ActiveProtocolSpec
         RECEIVE[Event] match {
           case m : MyMessage =>
             logger.trace(s"[$me] received message: $m")
-            assert(true)
             
           case m =>
             logger.error(s"[$me] received unexpected message: $m")
-            assert(false)
+            fail()
         }
       }
     }
@@ -206,11 +205,11 @@ class ActiveProtocolSpec
     
   
     case class MyMessage(from: PID) extends BroadcastMessage
-    class MySender (p: OcelotProcess, sender: Sender) extends ActiveProtocol(p, "sender")
+    class MySender (p: OcelotProcess, val sender: Sender) extends SendingProgram(p, "sender")
     {
       override def run () = {
         logger.trace(s"[$me] sending message")
-        sender.send(MyMessage(me))
+        SEND(MyMessage(me))
       }
     }
     class MyReceiver (p: OcelotProcess) extends Program(p, "receiver")
@@ -226,7 +225,7 @@ class ActiveProtocolSpec
             
           case m =>
             logger.error(s"[$me] received unexpected message: $m")
-            assert(false)
+            fail()
         }
       }
     }
@@ -256,11 +255,11 @@ class ActiveProtocolSpec
     
   
     case class MyMessage(from: PID, to: Set[PID]) extends MulticastMessage
-    class MySender (p: OcelotProcess, sender: Sender) extends ActiveProtocol(p, "sender")
+    class MySender (p: OcelotProcess, val sender: Sender) extends SendingProgram(p, "sender")
     {
       override def run () = {
         logger.trace(s"[$me] sending message")
-        sender.send(MyMessage(me, destinations))
+        SEND(MyMessage(me, destinations))
       }
     }
     class MyReceiver (p: OcelotProcess) extends Program(p, "receiver")
@@ -280,7 +279,7 @@ class ActiveProtocolSpec
             
           case m =>
             logger.error(s"[$me] received unexpected message: $m")
-            assert(false)
+            fail()
         }
       }
     }
