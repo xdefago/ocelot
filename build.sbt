@@ -1,6 +1,6 @@
 name := "Ocelot"
 
-version := "0.1"
+version := "0.1.1-SNAPSHOT"
 
 scalaVersion := "2.12.1"
 
@@ -16,3 +16,9 @@ libraryDependencies ++= Seq(
   "org.codehaus.groovy" % "groovy-all" % "2.4.7",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0"
 )
+
+publishTo := Some(Resolver.file("ocelot", file("sbt-repo")))
+
+// to use:
+//   resolvers += "ocelot" at "https://github.com/xdefago/ocelot/raw/master/sbt-repo/"
+//   libraryDependencies += "default" %% "ocelot" % <version>
