@@ -19,6 +19,7 @@ package ocelot
 import java.io.PrintStream
 
 import ocelot.kernel.{ Dispatcher, Protocol, Scheduler }
+import ocelot.util.SequentialPrintStream
 
 
 /**
@@ -27,13 +28,15 @@ import ocelot.kernel.{ Dispatcher, Protocol, Scheduler }
 class OcelotProcessImpl(
     val system: OcelotSystem,
     val pid: PID,
-    val out: PrintStream       = Console.out,
+    out0: PrintStream = Console.out,
     val dispatcher: Dispatcher = Dispatcher.withMessage(Console.err)
 ) extends OcelotProcess
 {
   private var _program   = Option.empty[ActiveProtocol]
   private var _protocols = Set.empty[ReactiveProtocol]
   private var _locked    = false
+ 
+  val out: PrintStream = new SequentialPrintStream(out0)
   
   def scheduler: Scheduler = system.scheduler
   
