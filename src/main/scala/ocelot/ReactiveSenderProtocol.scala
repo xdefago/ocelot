@@ -21,10 +21,11 @@ import ocelot.kernel.SenderProtocol
 /**
   * Created by defago on 2017/03/25.
   */
-abstract class ReactiveSenderProtocol(p: OcelotProcess, nickname: String, sender: Sender)
+abstract class ReactiveSenderProtocol(p: OcelotProcess, nickname: String)
   extends ReactiveProtocol(p, nickname)
     with SenderProtocol
     with SenderProtocolOps
+    with SendingProtocolOps
 {
   /**
     * Returns the set of neighbors as logically seen by the above protocol.
@@ -38,12 +39,19 @@ abstract class ReactiveSenderProtocol(p: OcelotProcess, nickname: String, sender
     * @return the set of neighbors as logically seen by the above
     *         protocol.
     */
-  def neighbors: Set[PID] = sender.neighbors
+  def neighbors: Set[PID] = NEIGHBORS
+  
+  def sender: Sender
 }
 
 
 object ReactiveSenderProtocol
 {
-  def apply(p: OcelotProcess, nickname: String, sender: Sender)(handler: PartialFunction[Event, Unit]): ReactiveSenderProtocol
-    = new ReactiveSenderProtocol(p, nickname, sender) { onReceive(handler) }
+  def apply(p: OcelotProcess, nickname: String, sender0: Sender)(handler: PartialFunction[Event, Unit]): ReactiveSenderProtocol =
+  {
+    new ReactiveSenderProtocol(p, nickname) {
+      onReceive(handler)
+      def sender = sender0
+    }
+  }
 }

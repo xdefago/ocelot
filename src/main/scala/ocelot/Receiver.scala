@@ -99,20 +99,23 @@ trait SenderProtocolOps
     def dispatcher: Dispatcher
   } =>
   
+  def neighbors: Set[PID]
+  
   protected[this] def DELIVER(ev: Event) = dispatcher.deliver(ev)
 }
 
 trait SendingProtocolOps
 { this: {
     def sender: Sender
+    def me : PID
   } =>
   protected[this] def SEND(ev: Event) = sender.send(ev)
   
-  protected[this] def ALL: Set[PID] = this.neighbors
+  protected[this] def ALL: Set[PID] = NEIGHBORS + me
   
-  protected[this] def neighbors: Set[PID] = sender.neighbors
+  protected[this] def NEIGHBORS: Set[PID] = sender.neighbors
   
-  protected[this] def N: Int = sender.neighbors.size
+  protected[this] def N: Int = NEIGHBORS.size
 }
 
 trait ActiveProtocolOps

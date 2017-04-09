@@ -110,7 +110,7 @@ class NetworkSpec extends FlatSpec
     case class TestMessage(from: PID, str: String) extends BroadcastMessage
     
     case class DummyReactive(p: OcelotProcess, sender: Sender)
-      extends ReactiveSenderProtocol(p, "dummy", sender)
+      extends ReactiveSenderProtocol(p, "dummy")
     {
       val addMe : UnaryOperator[Set[PID]] = (s:Set[PID]) => s + me
       onInit {
@@ -151,7 +151,7 @@ class NetworkSpec extends FlatSpec
     case class TestMessage(from: PID, seq: Int, str: String) extends BroadcastMessage
     
     case class DummyReactive(p: OcelotProcess, sender: Sender)
-      extends ReactiveSenderProtocol(p, "dummy", sender)
+      extends ReactiveSenderProtocol(p, "dummy")
     {
       def addMeAt(idx: Int): UnaryOperator[IndexedSeq[Set[PID]]] =
       {
@@ -205,7 +205,7 @@ class NetworkSpec extends FlatSpec
     case class TestMessage(from: PID, to: PID, str: String) extends UnicastMessage
     
     case class DummyReactive(p: OcelotProcess, sender: Sender)
-      extends ReactiveSenderProtocol(p, "dummy", sender)
+      extends ReactiveSenderProtocol(p, "dummy")
     {
       val addMe : UnaryOperator[Set[PID]] = (s:Set[PID]) => s + me
       onInit {
@@ -247,9 +247,9 @@ class NetworkSpec extends FlatSpec
     case class TestMessage(from: PID, to: PID, seq: Int, str: String) extends UnicastMessage
     
     case class DummyReactive(p: OcelotProcess, sender: Sender)
-      extends ReactiveSenderProtocol(p, "dummy", sender)
+      extends ReactiveSenderProtocol(p, "dummy")
     {
-      val next = me.map(i => (i+1) % neighbors.size)
+      val next = me.map(i => (i+1) % N)
       def addMeAt(idx: Int): UnaryOperator[IndexedSeq[Set[PID]]] =
       {
         val op: UnaryOperator[IndexedSeq[Set[PID]]] =
@@ -302,7 +302,7 @@ class NetworkSpec extends FlatSpec
     case class TestMessage(from: PID, to: Set[PID], str: String) extends MulticastMessage
     
     case class DummyReactive(p: OcelotProcess, sender: Sender)
-      extends ReactiveSenderProtocol(p, "dummy", sender)
+      extends ReactiveSenderProtocol(p, "dummy")
     {
       val addMe : UnaryOperator[Set[PID]] = (s:Set[PID]) => s + me
       onInit {
@@ -343,9 +343,9 @@ class NetworkSpec extends FlatSpec
     case class TestMessage(from: PID, to: Set[PID], seq: Int, str: String) extends MulticastMessage
     
     case class DummyReactive(p: OcelotProcess, sender: Sender)
-      extends ReactiveSenderProtocol(p, "dummy", sender)
+      extends ReactiveSenderProtocol(p, "dummy")
     {
-      val next = Set(me, me.map(i => (i+1) % neighbors.size))
+      val next = Set(me, me.map(i => (i+1) % N))
       def addMeAt(idx: Int): UnaryOperator[IndexedSeq[Set[PID]]] =
       {
         val op: UnaryOperator[IndexedSeq[Set[PID]]] =

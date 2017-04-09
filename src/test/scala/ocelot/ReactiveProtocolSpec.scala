@@ -37,7 +37,7 @@ class ReactiveProtocolSpec
   
   case class WrappingMessage(m: Message) extends Wrapper(m)
   case class WrappingProtocol(p: OcelotProcess, sender: Sender)
-    extends ReactiveSenderProtocol(p, "wrapping", sender)
+    extends ReactiveSenderProtocol(p, "wrapping")
   {
     onSend {
       case m: Message =>
@@ -55,7 +55,7 @@ class ReactiveProtocolSpec
   
   case class Token(from: PID, to: PID, sn: Int) extends UnicastMessage
   case class TokenRound(p: OcelotProcess, sender: Sender)(act: (Token)=>Unit)
-    extends ReactiveSenderProtocol(p, "token", sender)
+    extends ReactiveSenderProtocol(p, "token")
   {
     val next = me.map(i => (i+1) % sender.neighbors.size)
     onInit {
